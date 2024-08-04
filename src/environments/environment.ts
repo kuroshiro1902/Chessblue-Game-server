@@ -1,0 +1,16 @@
+import { env } from 'process';
+
+export const ENVIRONMENT = Object.freeze({
+  secretKey: env.SECRET_KEY!,
+  refreshSecretKey: env.REFRESH_SECRET_KEY!,
+  db: Object.freeze({
+    uri: env.DB_URI!,
+    dialect: env.DB_DIALECT!,
+    host: env.DB_HOST!,
+    port: +env.DB_PORT!,
+    name: env.DB_NAME!,
+  }),
+  redis: Object.freeze({
+    url: env.REDIS_URL!,
+  }),
+});
