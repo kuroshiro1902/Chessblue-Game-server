@@ -8,7 +8,7 @@ import { MatchSchema } from '@/models/match.model';
 import { IUser, UserSchema } from '@/models/user.model';
 import Joi from 'joi';
 import { uid } from 'uid';
-import { gameRooms } from './gameRoom.data';
+import { gameRooms } from './data';
 
 export interface ICreateRoomParams {
   host: IUser;

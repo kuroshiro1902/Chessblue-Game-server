@@ -1,7 +1,7 @@
 import { VALIDATOR } from '@/common/validators/Validator';
 import { IUser, UserValidate } from '@/models/user.model';
 import Joi from 'joi';
-import { gameRooms, MAX_PLAYER } from './gameRoom.data';
+import { gameRooms, MAX_PLAYER } from './data';
 import { createGameRoom } from './createGameRoom';
 import {
   GameRoomIdSchema,
