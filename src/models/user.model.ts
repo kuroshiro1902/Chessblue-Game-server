@@ -13,10 +13,14 @@ export interface ITokenPayload {
   id: number;
 }
 
+export const UserIdSchema = Joi.number().integer().positive().required();
+export const UserNameSchema = Joi.string().max(32).required();
+export const UserEmailSchema = Joi.string().empty(['', null]).email().max(64);
+
 export const UserSchema = Joi.object<IUser>({
-  id: Joi.number().integer().positive().required(),
-  name: Joi.string().max(32).required(),
-  email: Joi.string().empty(['', null]).email().max(64),
+  id: UserIdSchema,
+  name: UserNameSchema,
+  email: UserEmailSchema,
   dob: VALIDATOR.unixTimestamp().allow(null),
   avatarUrl: Joi.string().empty(['', null]).uri().max(255),
 }).unknown(false);

@@ -7,6 +7,6 @@ import GameController from '@/controllers/GameController';
  */
 const gameRouter = Router();
 gameRouter.get('/:roomId', GameController.getGameRoom);
-gameRouter.post('/create-game-room', GameController.createGameRoom);
+// gameRouter.post('/create-game-room', GameController.createGameRoom);
 
 export default gameRouter;
