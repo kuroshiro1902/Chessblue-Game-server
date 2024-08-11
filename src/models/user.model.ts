@@ -1,8 +1,10 @@
 import { VALIDATOR } from '@/common/validators/Validator';
 import Joi from 'joi';
 
+export type TUserId = number;
+
 export interface IUser {
-  id: number;
+  id: TUserId;
   name: string;
   email?: string;
   dob?: number;
@@ -10,7 +12,7 @@ export interface IUser {
 }
 
 export interface ITokenPayload {
-  id: number;
+  id: TUserId;
 }
 
 export const UserIdSchema = Joi.number().integer().positive().required();

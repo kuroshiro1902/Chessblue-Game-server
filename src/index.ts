@@ -1,9 +1,11 @@
 import 'dotenv/config';
+import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import router from '@/router';
 import { setupAssociations } from '@/models';
+import GameSocket from '@/sockets/GameSocket';
 // import { REDIS } from '@/database/redis';
 
 setupAssociations();
@@ -25,6 +27,9 @@ app.use(
   router
 );
 
-app.listen(4538, () => {
+const server = http.createServer(app);
+GameSocket.createServer(server);
+
+server.listen(4538, () => {
   console.log('listening on port ' + PORT);
 });

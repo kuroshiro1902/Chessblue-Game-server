@@ -2,41 +2,46 @@ import { VALIDATOR } from '@/common/validators/Validator';
 import { GameRoomIdSchema } from '@/models/gameRoom.model';
 import { UserIdSchema } from '@/models/user.model';
 import Joi from 'joi';
-import { gameRooms } from './data';
-
+import { PlayerStatus } from './data/playerStatus';
+import { GameRoomData } from './data/gameRooms';
 export interface ILeaveRoomParams {
-  roomId: string;
   playerId: number;
   isStopGame?: boolean;
 }
 
 const leaveGameRoomSchema = Joi.object<ILeaveRoomParams>({
-  roomId: GameRoomIdSchema.required(),
   playerId: UserIdSchema,
   isStopGame: Joi.bool(),
 }).unknown(false);
 
 export const leaveGameRoom = async (leaveRoomParams: ILeaveRoomParams) => {
-  const { roomId, playerId, isStopGame } = VALIDATOR.schemaValidate(
+  const { playerId, isStopGame } = VALIDATOR.schemaValidate(
     leaveGameRoomSchema,
     leaveRoomParams
   );
-  let room = gameRooms[roomId];
-  if (!room) {
-    throw new Error('Không tìm thấy phòng!');
+  const roomId = PlayerStatus.getJoinedRoom(playerId);
+  if (!roomId) {
+    throw new Error('Lỗi rời phòng: Bạn đang không tham gia phòng này!');
   }
 
-  // Loại bỏ người chơi ra khỏi phòng
-  room.players = room.players.filter((player) => player.id !== playerId);
-  if (isStopGame) {
-  } else {
-    // Call GameRoomService.endGame() here
+  let room = GameRoomData.get(roomId);
+  if (!room) {
+    throw new Error('Lỗi rời phòng: Phòng không tồn tại!');
   }
+
+  // Loại bỏ người chơi ra khỏi phòng.
+  room.players = room.players.filter((p) => p.id !== playerId);
+  // Bỏ đánh dấu người chơi đang tham gia phòng.
+  PlayerStatus.deleteJoinedRoom(playerId);
 
   // Nếu số người chơi còn lại là 0 thì xóa phòng
   if (room.players.length < 1) {
-    room = { ...gameRooms[roomId]! }; // Lưu lại thông tin phòng trước khi xóa để gửi về cho client
-    delete gameRooms[roomId];
+    room = GameRoomData.delete(roomId)!;
+  }
+
+  if (isStopGame) {
+  } else {
+    // Call GameRoomService.endGame() here
   }
 
   return {

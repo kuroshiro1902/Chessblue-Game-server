@@ -3,8 +3,10 @@ import { VALIDATOR } from '@/common/validators/Validator';
 import { IUser } from './user.model';
 import { IMatch, MatchDTO } from './match.model';
 
+export type TGameRoomId = string;
+
 export interface IGameRoom {
-  id: string;
+  id: TGameRoomId;
   host: IUser;
   players: IUser[];
   match?: IMatch;
